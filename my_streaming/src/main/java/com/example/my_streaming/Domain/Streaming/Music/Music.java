@@ -1,5 +1,6 @@
 package com.example.my_streaming.Domain.Streaming.Music;
 
+import com.example.my_streaming.Domain.Account.Playlist.Playlist;
 import com.example.my_streaming.Domain.Streaming.Album.Album;
 import jakarta.persistence.*;
 
@@ -11,8 +12,15 @@ public class Music {
     private Long id;
 
     private String name;
-    private int duration;
+    private double duration;
     //private Album album;
+
+
+    public Music(Long id, String name, double duration) {
+        this.id = id;
+        this.name = name;
+        this.duration = duration;
+    }
 
     public Long getId() {
         return id;
@@ -30,11 +38,23 @@ public class Music {
         this.name = name;
     }
 
-    public int getDuration() {
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "playlist_id")
+    private Playlist playlist;
+
+    public Playlist getPlaylist() {
+        return playlist;
+    }
+
+    public void setPlaylist(Playlist playlist) {
+        this.playlist = playlist;
+    }
+
+    public double getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(double duration) {
         this.duration = duration;
     }
 

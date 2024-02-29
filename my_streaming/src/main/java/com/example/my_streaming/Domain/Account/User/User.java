@@ -1,11 +1,18 @@
 package com.example.my_streaming.Domain.Account.User;
 
+import com.example.my_streaming.Domain.Streaming.Music.Music;
 import com.example.my_streaming.Domain.Transactions.Card.Card;
 import com.example.my_streaming.Domain.Account.Playlist.Playlist;
+import com.example.my_streaming.Domain.Transactions.Plan.Plan;
 import com.example.my_streaming.Domain.Transactions.Subscription.Subscription;
+import com.example.my_streaming.Exceptions.BusinessException;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
+
 @Entity
 @Table(name = "tb_user")
 public class User {
@@ -28,6 +35,80 @@ public class User {
 
     @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
     private List<Subscription> subscriptionList;
+
+    public User() {
+        this.cards = new ArrayList<>();
+        this.playlists = new ArrayList<>();
+        this.subscriptionList = new ArrayList<>();
+    }
+
+    public void createAccountOnStreaming(String name, Plan plan, Card card) {
+        this.name = name;
+        this.subscribeToPlan(plan, card);
+        this.addCard(card);
+        this.createPlaylist();
+    }
+
+    public void createPlaylist(String name, boolean isOpen) {
+        Playlist playlist = new Playlist();
+        playlist.setId(new Random().nextLong());
+        playlist.setName(name);
+        playlist.setOpen(isOpen);
+        playlist.setUser(this);
+        this.playlists.add(playlist);
+    }
+
+    public void createPlaylist() {
+        this.createPlaylist("Favorites", false);
+    }
+
+    private void addCard(Card card) {
+        this.cards.add(card);
+    }
+
+    private void subscribeToPlan(Plan plan, Card card) {
+        card.createTransaction(plan.getName(), plan.getPlan_value(), plan.getDescription());
+
+        for (Subscription subscription : this.subscriptionList) {
+            if (subscription.isActive()) {
+                subscription.setActive(false);
+            }
+        }
+
+        Subscription newSubscription = new Subscription();
+        newSubscription.setActive(true);
+        newSubscription.setDate(new Date());
+        newSubscription.setPlan(plan);
+        newSubscription.setId(new Random().nextLong());
+        this.subscriptionList.add(newSubscription);
+    }
+
+    public void favoriteMusic(Music music, String playlistName) {
+        Playlist playlist = this.getPlaylistByName(playlistName);
+        if (playlist == null) {
+            throw new RuntimeException("Playlist not found");
+        }
+        playlist.getMusics().add(music);
+    }
+
+    public void unfavoriteMusic(Music music, String playlistName) {
+        Playlist playlist = this.getPlaylistByName(playlistName);
+        if (playlist == null) {
+            throw new RuntimeException("Playlist not found");
+        }
+        playlist.getMusics().removeIf(m -> m.getId().equals(music.getId()));
+    }
+
+    private Playlist getPlaylistByName(String playlistName) {
+        for (Playlist playlist : this.playlists) {
+            if (playlist.getName().equals(playlistName)) {
+                return playlist;
+            }
+        }
+        return null;
+    }
+
+
 
     public Long getId() {
         return id;

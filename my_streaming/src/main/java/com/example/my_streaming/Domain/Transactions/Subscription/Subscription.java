@@ -14,7 +14,8 @@ public class Subscription {
 
     private long Id;
 
-    //private Plan plan;
+    @OneToOne(mappedBy = "subscription", cascade = CascadeType.ALL)
+    private Plan plan;
     private boolean active;
     private Date date;
 
@@ -38,13 +39,13 @@ public class Subscription {
         Id = id;
     }
 
-//    public Plan getPlan() {
-//        return plan;
-//    }
-//
-//    public void setPlan(Plan plan) {
-//        this.plan = plan;
-//    }
+    public Plan getPlan() {
+        return plan;
+    }
+
+    public void setPlan(Plan plan) {
+        this.plan = plan;
+    }
 
     public boolean isActive() {
         return active;

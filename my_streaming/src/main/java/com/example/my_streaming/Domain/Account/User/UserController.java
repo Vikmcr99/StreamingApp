@@ -1,5 +1,6 @@
 package com.example.my_streaming.Domain.Account.User;
 
+import com.example.my_streaming.Requests.CreateUserRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,17 +44,14 @@ public class UserController {
     }
 
     @PostMapping(value = "/users")
-    public ResponseEntity<User> createAccount(@RequestBody User user){
-        try{
-            service.createUser(user);
-            return new ResponseEntity<User>(user, HttpStatus.OK);
-        }catch (Exception e) // Depois fazer um Tratamento de exceção global
-        {
+    public ResponseEntity<User> createAccount(@RequestBody CreateUserRequest createUserRequest) {
+        try {
+            User user = service.createUser(createUserRequest);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
     }
-
 
     @SuppressWarnings("rawtypes")
     @DeleteMapping(value = "/users/{id}")

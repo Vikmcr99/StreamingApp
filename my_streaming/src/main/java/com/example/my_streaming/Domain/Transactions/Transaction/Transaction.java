@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "tb_transactions_")
+@Table(name = "tb_transactions")
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
@@ -67,4 +67,6 @@ public class Transaction {
     public void setDescription(String description) {
         this.description = description;
     }
+
+
 }

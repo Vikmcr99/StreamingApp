@@ -19,7 +19,9 @@ public class Playlist {
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id")
     private User user;
-   // private List<Music> musics;
+
+    @OneToMany (mappedBy = "playlist", cascade = CascadeType.ALL)
+    private List<Music> musics;
 
     public long getId() {
         return Id;
@@ -53,12 +55,12 @@ public class Playlist {
         this.user = user;
     }
 
-//    public List<Music> getMusics() {
-//        return musics;
-//    }
-//
-//    public void setMusics(List<Music> musics) {
-//        this.musics = musics;
-//    }
+    public List<Music> getMusics() {
+        return musics;
+    }
+
+    public void setMusics(List<Music> musics) {
+        this.musics = musics;
+    }
 }
 

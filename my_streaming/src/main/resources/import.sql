@@ -1,1 +1,2 @@
 INSERT INTO tb_user (name, email, cpf, password) VALUES ('victor', 'victor@mail.com', '195645642152', '123123')
+INSERT INTO tb_plan (name, description, plan_value) VALUES ('BASIC', 'Basic plan', 19.99)
