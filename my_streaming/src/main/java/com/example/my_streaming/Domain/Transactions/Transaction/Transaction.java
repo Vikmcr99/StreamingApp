@@ -12,7 +12,7 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;
     private Date date;
-    private double value;
+    private double transaction_value;
     private String merchant;
     private String description;
 
@@ -44,12 +44,12 @@ public class Transaction {
         this.date = date;
     }
 
-    public double getValue() {
-        return value;
+    public double getTransaction_value() {
+        return transaction_value;
     }
 
-    public void setValue(double value) {
-        this.value = value;
+    public void setTransaction_value(double transaction_value) {
+        this.transaction_value = transaction_value;
     }
 
     public String getMerchant() {

@@ -1,6 +1,26 @@
 package com.example.my_streaming.Domain.Streaming.Band;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.my_streaming.Domain.Streaming.Music.Music;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.client.RestTemplate;
 
-public interface BandRepository extends JpaRepository<Band, Long> {
+@Repository
+public class BandRepository {
+    private final RestTemplate restTemplate;
+
+    public BandRepository(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    public Music getMusic(long id) {
+        String url = "http://localhost:9090/api/musics/" + id;
+
+        Music music = restTemplate.getForObject(url, Music.class);
+
+        if (music == null) {
+            throw new RuntimeException("Cant search music");
+        }
+
+        return music;
+    }
 }

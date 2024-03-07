@@ -37,7 +37,7 @@ public class Card {
 
         Transaction transaction = new Transaction();
         transaction.setMerchant(merchant);
-        transaction.setValue(value);
+        transaction.setTransaction_value(value);
         transaction.setDescription(description);
         transaction.setDate(new Date());
 
@@ -51,7 +51,7 @@ public class Card {
         }
 
         transaction.setId(id);
-        available_limit -= transaction.getValue();
+        available_limit -= transaction.getTransaction_value();
         transactions.add(transaction);
     }
 
@@ -65,7 +65,7 @@ public class Card {
     }
 
     private void checkAvailableLimit(Transaction transaction, CardException validationErrors) {
-        if (transaction.getValue() > available_limit) {
+        if (transaction.getTransaction_value() > available_limit) {
             validationErrors.addError(new BusinessValidation(
                     "Card does not have enough limit for this transaction",
                     "Card"
@@ -89,7 +89,7 @@ public class Card {
         }
 
         long merchantRepeatCount = recentTransactions.stream()
-                .filter(trans -> trans.getMerchant().equalsIgnoreCase(transaction.getMerchant()) && trans.getValue() == transaction.getValue())
+                .filter(trans -> trans.getMerchant().equalsIgnoreCase(transaction.getMerchant()) && trans.getTransaction_value() == transaction.getTransaction_value())
                 .count();
 
         if (merchantRepeatCount >= TRANSACTION_MERCHANT_REPEAT) {

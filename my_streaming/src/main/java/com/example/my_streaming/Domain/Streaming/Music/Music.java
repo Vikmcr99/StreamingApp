@@ -10,8 +10,9 @@ public class Music {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private Long id;
-
+    @Column
     private String name;
+    @Column
     private double duration;
     //private Album album;
 

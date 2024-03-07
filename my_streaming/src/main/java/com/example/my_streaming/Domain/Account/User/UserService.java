@@ -55,7 +55,7 @@ public class UserService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
-            Music music = new Music(musicId, "god plan", 2.0);
+            Music music = verifyMusic(musicId);
             user.favoriteMusic(music, "Favorites");
 
             userRepository.save(user);
@@ -68,23 +68,22 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-//            Music music = verifyMusic(musicId);
-            Music music = new Music(musicId, "god plan", 2.0);
+            Music music = verifyMusic(musicId);
             user.unfavoriteMusic(music, "Favorites");
             userRepository.save(user);
         } else {
             throw new RuntimeException("User not found");
         }
     }
-//TODO Decidir sobre a musica se fica nesse projeto ou no outro
 
-//    private Music verifyMusic(Long musicId) {
-//        Music music = bandRepository.getMusic(musicId);
-//        if (music == null) {
-//            throw new RuntimeException("Não encontrei a música a ser favoritada");
-//        }
-//        return music;
-//    }
+
+    private Music verifyMusic(Long musicId) {
+        Music music = bandRepository.getMusic(musicId);
+        if (music == null) {
+            throw new RuntimeException("did not find the requested music");
+        }
+        return music;
+    }
 
 
     @Transactional(readOnly = true)
