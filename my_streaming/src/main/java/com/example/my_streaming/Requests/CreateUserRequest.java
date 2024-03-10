@@ -1,14 +1,15 @@
 package com.example.my_streaming.Requests;
 
 import com.example.my_streaming.Domain.Transactions.Card.Card;
+import jakarta.validation.constraints.NotNull;
 
 
 public class CreateUserRequest {
-
+    @NotNull
     private String name;
-
+    @NotNull
     private Long planId;
-
+    @NotNull
     private CardRequest card;
 
     public String getName() {

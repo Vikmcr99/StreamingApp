@@ -9,7 +9,7 @@ public class Plan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
-    private long Id;
+    private Long Id;
     private String name;
     private String description;
     private double plan_value;
@@ -17,7 +17,7 @@ public class Plan {
     @JoinColumn(name = "subscription_id")
     private Subscription subscription;
 
-    public Plan(long id, String name, String description, double plan_value, Subscription subscription) {
+    public Plan(Long id, String name, String description, double plan_value, Subscription subscription) {
         Id = id;
         this.name = name;
         this.description = description;
@@ -29,11 +29,13 @@ public class Plan {
 
     }
 
-    public long getId() {
+
+
+    public Long getId() {
         return Id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         Id = id;
     }
 

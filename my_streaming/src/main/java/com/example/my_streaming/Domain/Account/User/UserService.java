@@ -26,27 +26,17 @@ public class UserService {
     @Autowired
     private BandRepository bandRepository;
 
-    public User createUser(CreateUserRequest createUserRequest) {
-        Plan plan = planRepository.getPlanById(createUserRequest.getPlanId());
+    public User createUser(String name, Long planId, Card card) {
+        Plan plan = planRepository.getPlanById(planId);
         if (plan == null) {
             throw new RuntimeException("Plan not found");
         }
 
-        Card card = convertToCard(createUserRequest.getCard());
-
         User user = new User();
-        user.createAccountOnStreaming(createUserRequest.getName(), plan, card);
+        user.createAccountOnStreaming(name, plan, card);
         userRepository.save(user);
 
         return user;
-    }
-
-    private Card convertToCard(CardRequest cardRequest) {
-        Card card = new Card();
-        card.setCard_number(cardRequest.getNumber());
-        card.setActive_card(cardRequest.getActive());
-        card.setAvailable_limit(cardRequest.getLimit());
-        return card;
     }
 
     public void favoriteMusic(Long userId, Long musicId) {

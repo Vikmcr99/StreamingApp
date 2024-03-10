@@ -12,7 +12,7 @@ public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private long Id;
+    private Long Id;
 
     @OneToOne(mappedBy = "subscription", cascade = CascadeType.ALL)
     private Plan plan;
@@ -31,11 +31,11 @@ public class Subscription {
         this.user = user;
     }
 
-    public long getId() {
+    public Long getId() {
         return Id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         Id = id;
     }
 

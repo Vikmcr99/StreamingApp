@@ -27,13 +27,13 @@ public class User {
 
     private String password;
 
-    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "user", cascade = CascadeType.MERGE)
     private List<Card> cards;
 
-    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "user", cascade = CascadeType.MERGE)
     private List<Playlist> playlists;
 
-    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "user", cascade = CascadeType.MERGE)
     private List<Subscription> subscriptionList;
 
     public User() {

@@ -12,7 +12,7 @@ public class BandRepository {
         this.restTemplate = restTemplate;
     }
 
-    public Music getMusic(long id) {
+    public Music getMusic(Long id) {
         String url = "http://localhost:9090/api/musics/" + id;
 
         Music music = restTemplate.getForObject(url, Music.class);

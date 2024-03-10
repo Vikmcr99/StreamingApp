@@ -8,8 +8,10 @@ import java.util.Random;
 
 public interface PlanRepository extends JpaRepository<Plan, Long> {
 
-    @Query("SELECT p FROM Plan p WHERE p.id = :planoId")
-    Plan getPlanById(@Param("planoId") Long planoId);
-
+    @Query("SELECT p FROM Plan p WHERE p.Id = :planId")
+    Plan getPlanById(@Param("planId") Long planId);
 
 }
+
+
+

@@ -4,6 +4,7 @@ import com.example.my_streaming.Domain.Account.User.User;
 import com.example.my_streaming.Domain.Streaming.Music.Music;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,7 +12,7 @@ import java.util.List;
 public class Playlist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private Long Id;
 
     private String name;
     private boolean open;
@@ -21,13 +22,13 @@ public class Playlist {
     private User user;
 
     @OneToMany (mappedBy = "playlist", cascade = CascadeType.ALL)
-    private List<Music> musics;
+    private List<Music> musics = new ArrayList<>();
 
-    public long getId() {
+    public Long getId() {
         return Id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         Id = id;
     }
 

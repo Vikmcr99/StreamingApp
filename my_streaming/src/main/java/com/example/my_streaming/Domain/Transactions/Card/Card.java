@@ -28,7 +28,7 @@ public class Card {
     @JoinColumn(name = "user_id")
     private User user;
     @OneToMany (mappedBy = "card", cascade = CascadeType.ALL)
-    private List<Transaction> transactions;
+    private List<Transaction> transactions = new ArrayList<>();
 
     public void createTransaction(String merchant, double value, String description) {
         CardException validationErrors = new CardException();

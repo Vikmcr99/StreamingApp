@@ -1,6 +1,13 @@
 package com.example.my_streaming.Domain.Account.User;
 
+import com.example.my_streaming.Domain.Account.Playlist.Playlist;
+import com.example.my_streaming.Domain.Streaming.Music.Music;
+import com.example.my_streaming.Domain.Transactions.Card.Card;
+import com.example.my_streaming.Domain.Transactions.Subscription.Subscription;
 import com.example.my_streaming.Requests.CreateUserRequest;
+import com.example.my_streaming.Responses.MusicResponse;
+import com.example.my_streaming.Responses.UserResponse;
+import com.example.my_streaming.Responses.PlaylistResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/v1", produces = {"application/json"})
@@ -32,22 +40,31 @@ public class UserController {
     }
 
     @GetMapping(value = "/users/{id}")
-    public ResponseEntity<User> findById(@PathVariable("id") Long id) {
+    public ResponseEntity<UserResponse> findById(@PathVariable("id") Long id) {
         try {
             User user = service.getById(id);
-            return new ResponseEntity<User>(user, HttpStatus.OK);
+            UserResponse response = userToResponse(user);
+
+            return new ResponseEntity<UserResponse>(response, HttpStatus.OK);
         }
 
         catch (NoSuchElementException ns) {
-            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<UserResponse>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping(value = "/users")
-    public ResponseEntity<User> createAccount(@RequestBody CreateUserRequest createUserRequest) {
+    public ResponseEntity<UserResponse> createAccount(@RequestBody CreateUserRequest request) {
         try {
-            User user = service.createUser(createUserRequest);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            Card card = new Card();
+            card.setAvailable_limit(request.getCard().getLimit());
+            card.setActive_card(request.getCard().getActive());
+            card.setCard_number(request.getCard().getNumber());
+
+
+            User user = service.createUser(request.getName(), request.getPlanId(), card);
+            UserResponse response = userToResponse(user);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -65,6 +82,39 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    private UserResponse userToResponse(User createdUser) {
+        UserResponse response = new UserResponse();
+        response.setId(createdUser.getId());
+        response.setName(createdUser.getName());
+
+        Optional<Subscription> activeSubscription = createdUser.getSubscriptionList().stream()
+                .filter(Subscription::isActive)
+                .findFirst();
+
+        if (activeSubscription.isPresent()) {
+            response.setPlanId(activeSubscription.get().getPlan().getId());
+        } else {
+            throw new RuntimeException("No active plan found for the user: " + createdUser.getId());
+        }
+
+        for (Playlist playlist : createdUser.getPlaylists()) {
+            PlaylistResponse playlistResponse = new PlaylistResponse();
+            playlistResponse.setId(playlist.getId());
+            playlistResponse.setName(playlist.getName());
+            response.getPlaylists().add(playlistResponse);
+
+            for (Music music : playlist.getMusics()) {
+                MusicResponse musicResponse = new MusicResponse();
+                musicResponse.setDuration(music.getDuration());
+                musicResponse.setName(music.getName());
+                musicResponse.setId(music.getId());
+                playlistResponse.getMusics().add(musicResponse);
+            }
+        }
+
+        return response;
     }
 }
 
