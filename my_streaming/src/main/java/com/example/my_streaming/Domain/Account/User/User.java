@@ -6,6 +6,7 @@ import com.example.my_streaming.Domain.Account.Playlist.Playlist;
 import com.example.my_streaming.Domain.Transactions.Plan.Plan;
 import com.example.my_streaming.Domain.Transactions.Subscription.Subscription;
 import com.example.my_streaming.Exceptions.BusinessException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -27,14 +28,15 @@ public class User {
 
     private String password;
 
-    @OneToMany (mappedBy = "user", cascade = CascadeType.MERGE)
-    private List<Card> cards;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
+    private List<Card> cards = new ArrayList<>();
 
-    @OneToMany (mappedBy = "user", cascade = CascadeType.MERGE)
-    private List<Playlist> playlists;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Playlist> playlists = new ArrayList<>();
 
-    @OneToMany (mappedBy = "user", cascade = CascadeType.MERGE)
-    private List<Subscription> subscriptionList;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER ,  cascade = CascadeType.ALL)
+    private List<Subscription> subscriptionList = new ArrayList<>();
 
     public User() {
         this.cards = new ArrayList<>();
@@ -47,6 +49,7 @@ public class User {
         this.subscribeToPlan(plan, card);
         this.addCard(card);
         this.createPlaylist();
+
     }
 
     public void createPlaylist(String name, boolean isOpen) {
@@ -80,6 +83,7 @@ public class User {
         newSubscription.setDate(new Date());
         newSubscription.setPlan(plan);
         newSubscription.setId(new Random().nextLong());
+        newSubscription.setUser(this);
         this.subscriptionList.add(newSubscription);
     }
 

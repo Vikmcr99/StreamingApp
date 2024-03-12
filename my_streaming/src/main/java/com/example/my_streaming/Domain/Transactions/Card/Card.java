@@ -24,10 +24,10 @@ public class Card {
     private Double available_limit;
 
     private Boolean active_card;
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany (mappedBy = "card", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "card", fetch = FetchType.EAGER, cascade =  CascadeType.ALL)
     private List<Transaction> transactions = new ArrayList<>();
 
     public void createTransaction(String merchant, double value, String description) {
@@ -40,6 +40,7 @@ public class Card {
         transaction.setTransaction_value(value);
         transaction.setDescription(description);
         transaction.setDate(new Date());
+        transaction.setCard(this);
 
         checkAvailableLimit(transaction, validationErrors);
         validateTransaction(transaction, validationErrors);
@@ -89,7 +90,8 @@ public class Card {
         }
 
         long merchantRepeatCount = recentTransactions.stream()
-                .filter(trans -> trans.getMerchant().equalsIgnoreCase(transaction.getMerchant()) && trans.getTransaction_value() == transaction.getTransaction_value())
+                .filter(trans -> trans.getMerchant().equalsIgnoreCase(transaction.getMerchant())
+                        && trans.getTransaction_value() == transaction.getTransaction_value())
                 .count();
 
         if (merchantRepeatCount >= TRANSACTION_MERCHANT_REPEAT) {

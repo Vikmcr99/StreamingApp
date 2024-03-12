@@ -17,11 +17,11 @@ public class Playlist {
     private String name;
     private boolean open;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany (mappedBy = "playlist", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "playlist", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Music> musics = new ArrayList<>();
 
     public Long getId() {

@@ -16,7 +16,7 @@ public class Transaction {
     private String merchant;
     private String description;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "card_id")
     private Card card;
 

@@ -61,7 +61,6 @@ public class UserController {
             card.setActive_card(request.getCard().getActive());
             card.setCard_number(request.getCard().getNumber());
 
-
             User user = service.createUser(request.getName(), request.getPlanId(), card);
             UserResponse response = userToResponse(user);
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -77,7 +76,7 @@ public class UserController {
         {
             service.deleteUser(id);
             return new ResponseEntity(HttpStatus.OK);
-        } catch (Exception e) // Depois fazer um Tratamento de exceção global
+        } catch (Exception e)
         {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -89,14 +88,15 @@ public class UserController {
         response.setId(createdUser.getId());
         response.setName(createdUser.getName());
 
-        Optional<Subscription> activeSubscription = createdUser.getSubscriptionList().stream()
+        Subscription activeSubscription = createdUser.getSubscriptionList().stream()
                 .filter(Subscription::isActive)
-                .findFirst();
+                .findFirst()
+                .orElse(null);
 
-        if (activeSubscription.isPresent()) {
-            response.setPlanId(activeSubscription.get().getPlan().getId());
+        if (activeSubscription != null) {
+            response.setPlanId(activeSubscription.getPlan().getId());
         } else {
-            throw new RuntimeException("No active plan found for the user: " + createdUser.getId());
+            throw new RuntimeException("No active subscription found for the user: " + createdUser.getId());
         }
 
         for (Playlist playlist : createdUser.getPlaylists()) {

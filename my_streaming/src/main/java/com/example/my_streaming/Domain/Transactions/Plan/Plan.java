@@ -13,8 +13,7 @@ public class Plan {
     private String name;
     private String description;
     private double plan_value;
-    @OneToOne
-    @JoinColumn(name = "subscription_id")
+    @OneToOne(mappedBy = "plan", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Subscription subscription;
 
     public Plan(Long id, String name, String description, double plan_value, Subscription subscription) {

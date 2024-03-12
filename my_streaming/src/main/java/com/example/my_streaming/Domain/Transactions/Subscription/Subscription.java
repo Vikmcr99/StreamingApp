@@ -14,12 +14,13 @@ public class Subscription {
 
     private Long Id;
 
-    @OneToOne(mappedBy = "subscription", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "plan_id")
     private Plan plan;
-    private boolean active;
+    private Boolean active;
     private Date date;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -47,11 +48,11 @@ public class Subscription {
         this.plan = plan;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 

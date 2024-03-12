@@ -7,6 +7,7 @@ import com.example.my_streaming.Domain.Transactions.Plan.Plan;
 import com.example.my_streaming.Domain.Transactions.Plan.PlanRepository;
 import com.example.my_streaming.Requests.CardRequest;
 import com.example.my_streaming.Requests.CreateUserRequest;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,10 @@ public class UserService {
 
     @Autowired
     private BandRepository bandRepository;
+    @Autowired
+    private EntityManager entityManager;
 
+    @Transactional
     public User createUser(String name, Long planId, Card card) {
         Plan plan = planRepository.getPlanById(planId);
         if (plan == null) {
@@ -34,6 +38,15 @@ public class UserService {
 
         User user = new User();
         user.createAccountOnStreaming(name, plan, card);
+
+        card.setUser(user);
+        user.getCards().add(card);
+
+         if (!entityManager.contains(user)) {
+            user = entityManager.merge(user);
+        }
+
+
         userRepository.save(user);
 
         return user;

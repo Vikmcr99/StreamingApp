@@ -3,6 +3,7 @@ package com.example.my_streaming.Domain.Streaming.Music;
 import com.example.my_streaming.Domain.Account.Playlist.Playlist;
 import com.example.my_streaming.Domain.Streaming.Album.Album;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
 
 @Entity
 @Table(name = "tb_music")
@@ -14,7 +15,10 @@ public class Music {
     private String name;
     @Column
     private double duration;
-    //private Album album;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "playlist_id")
+    private Playlist playlist;
 
 
     public Music(Long id, String name, double duration) {
@@ -39,9 +43,6 @@ public class Music {
         this.name = name;
     }
 
-    @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "playlist_id")
-    private Playlist playlist;
 
     public Playlist getPlaylist() {
         return playlist;
@@ -59,12 +60,6 @@ public class Music {
         this.duration = duration;
     }
 
-//    public Album getAlbum() {
-//        return album;
-//    }
-//
-//    public void setAlbum(Album album) {
-//        this.album = album;
-//    }
+
 }
 
