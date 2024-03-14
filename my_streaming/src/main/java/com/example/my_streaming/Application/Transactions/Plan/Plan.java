@@ -1,6 +1,6 @@
-package com.example.my_streaming.Domain.Transactions.Plan;
+package com.example.my_streaming.Application.Transactions.Plan;
 
-import com.example.my_streaming.Domain.Transactions.Subscription.Subscription;
+import com.example.my_streaming.Application.Transactions.Subscription.Subscription;
 import jakarta.persistence.*;
 
 @Entity

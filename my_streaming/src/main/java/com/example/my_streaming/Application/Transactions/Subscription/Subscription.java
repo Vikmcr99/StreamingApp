@@ -1,7 +1,7 @@
-package com.example.my_streaming.Domain.Transactions.Subscription;
+package com.example.my_streaming.Application.Transactions.Subscription;
 
-import com.example.my_streaming.Domain.Account.User.User;
-import com.example.my_streaming.Domain.Transactions.Plan.Plan;
+import com.example.my_streaming.Application.Account.User.User;
+import com.example.my_streaming.Application.Transactions.Plan.Plan;
 import jakarta.persistence.*;
 
 import java.util.Date;

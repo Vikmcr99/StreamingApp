@@ -1,12 +1,10 @@
-package com.example.my_streaming.Domain.Account.User;
+package com.example.my_streaming.Application.Account.User;
 
-import com.example.my_streaming.Domain.Streaming.Band.BandRepository;
-import com.example.my_streaming.Domain.Streaming.Music.Music;
-import com.example.my_streaming.Domain.Transactions.Card.Card;
-import com.example.my_streaming.Domain.Transactions.Plan.Plan;
-import com.example.my_streaming.Domain.Transactions.Plan.PlanRepository;
-import com.example.my_streaming.Requests.CardRequest;
-import com.example.my_streaming.Requests.CreateUserRequest;
+import com.example.my_streaming.Application.Streaming.Band.BandRepository;
+import com.example.my_streaming.Application.Streaming.Music.Music;
+import com.example.my_streaming.Application.Transactions.Card.Card;
+import com.example.my_streaming.Application.Transactions.Plan.Plan;
+import com.example.my_streaming.Application.Transactions.Plan.PlanRepository;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,10 +67,13 @@ public class UserService {
 
     public void unfavoriteMusic(Long userId, Long musicId) {
         Optional<User> optionalUser = userRepository.findById(userId);
+
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+
             Music music = verifyMusic(musicId);
             user.unfavoriteMusic(music, "Favorites");
+
             userRepository.save(user);
         } else {
             throw new RuntimeException("User not found");

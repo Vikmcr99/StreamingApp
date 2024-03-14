@@ -1,7 +1,7 @@
-package com.example.my_streaming.Domain.Account.Playlist;
+package com.example.my_streaming.Application.Account.Playlist;
 
-import com.example.my_streaming.Domain.Account.User.User;
-import com.example.my_streaming.Domain.Streaming.Music.Music;
+import com.example.my_streaming.Application.Account.User.User;
+import com.example.my_streaming.Application.Streaming.Music.Music;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

@@ -1,11 +1,10 @@
-package com.example.my_streaming.Domain.Account.User;
+package com.example.my_streaming.Application.Account.User;
 
-import com.example.my_streaming.Domain.Streaming.Music.Music;
-import com.example.my_streaming.Domain.Transactions.Card.Card;
-import com.example.my_streaming.Domain.Account.Playlist.Playlist;
-import com.example.my_streaming.Domain.Transactions.Plan.Plan;
-import com.example.my_streaming.Domain.Transactions.Subscription.Subscription;
-import com.example.my_streaming.Exceptions.BusinessException;
+import com.example.my_streaming.Application.Streaming.Music.Music;
+import com.example.my_streaming.Application.Transactions.Card.Card;
+import com.example.my_streaming.Application.Account.Playlist.Playlist;
+import com.example.my_streaming.Application.Transactions.Plan.Plan;
+import com.example.my_streaming.Application.Transactions.Subscription.Subscription;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 

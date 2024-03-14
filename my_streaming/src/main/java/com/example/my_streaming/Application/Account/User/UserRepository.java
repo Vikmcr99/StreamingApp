@@ -1,4 +1,4 @@
-package com.example.my_streaming.Domain.Account.User;
+package com.example.my_streaming.Application.Account.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

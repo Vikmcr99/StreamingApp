@@ -1,7 +1,7 @@
-package com.example.my_streaming.Domain.Transactions.Card;
+package com.example.my_streaming.Application.Transactions.Card;
 
-import com.example.my_streaming.Domain.Account.User.User;
-import com.example.my_streaming.Domain.Transactions.Transaction.Transaction;
+import com.example.my_streaming.Application.Account.User.User;
+import com.example.my_streaming.Application.Transactions.Transaction.Transaction;
 import com.example.my_streaming.Exceptions.BusinessException;
 import com.example.my_streaming.Exceptions.BusinessValidation;
 import com.example.my_streaming.Exceptions.CardException;

@@ -1,6 +1,6 @@
-package com.example.my_streaming.Domain.Streaming.Band;
+package com.example.my_streaming.Application.Streaming.Band;
 
-import com.example.my_streaming.Domain.Streaming.Music.Music;
+import com.example.my_streaming.Application.Streaming.Music.Music;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 

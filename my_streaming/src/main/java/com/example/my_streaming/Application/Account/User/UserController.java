@@ -1,9 +1,9 @@
-package com.example.my_streaming.Domain.Account.User;
+package com.example.my_streaming.Application.Account.User;
 
-import com.example.my_streaming.Domain.Account.Playlist.Playlist;
-import com.example.my_streaming.Domain.Streaming.Music.Music;
-import com.example.my_streaming.Domain.Transactions.Card.Card;
-import com.example.my_streaming.Domain.Transactions.Subscription.Subscription;
+import com.example.my_streaming.Application.Account.Playlist.Playlist;
+import com.example.my_streaming.Application.Streaming.Music.Music;
+import com.example.my_streaming.Application.Transactions.Card.Card;
+import com.example.my_streaming.Application.Transactions.Subscription.Subscription;
 import com.example.my_streaming.Requests.CreateUserRequest;
 import com.example.my_streaming.Responses.MusicResponse;
 import com.example.my_streaming.Responses.UserResponse;
@@ -12,12 +12,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/v1", produces = {"application/json"})
@@ -68,6 +66,42 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping(value = "/users/{id}/favorite/{idMusic}")
+    public ResponseEntity<UserResponse> FavoriteMusic(@PathVariable("id") Long id, @PathVariable("idMusic") Long idMusic){
+
+        try{
+
+            User user = service.getById(id);
+            service.favoriteMusic(id, idMusic);
+
+
+            UserResponse response = userToResponse(user);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } catch (RuntimeException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "/users/{id}/unfavorite/{idMusic}")
+    public ResponseEntity<UserResponse> UnfavoriteMusic(@PathVariable("id") Long id, @PathVariable("idMusic") Long idMusic){
+
+        try{
+            service.unfavoriteMusic(id, idMusic);
+
+            User user = service.getById(id);
+
+            UserResponse response = userToResponse(user);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } catch (RuntimeException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     @SuppressWarnings("rawtypes")
     @DeleteMapping(value = "/users/{id}")

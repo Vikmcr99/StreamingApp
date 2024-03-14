@@ -1,9 +1,7 @@
-package com.example.my_streaming.Domain.Streaming.Music;
+package com.example.my_streaming.Application.Streaming.Music;
 
-import com.example.my_streaming.Domain.Account.Playlist.Playlist;
-import com.example.my_streaming.Domain.Streaming.Album.Album;
+import com.example.my_streaming.Application.Account.Playlist.Playlist;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
 
 @Entity
 @Table(name = "tb_music")
@@ -25,6 +23,10 @@ public class Music {
         this.id = id;
         this.name = name;
         this.duration = duration;
+    }
+
+    public Music(){
+
     }
 
     public Long getId() {

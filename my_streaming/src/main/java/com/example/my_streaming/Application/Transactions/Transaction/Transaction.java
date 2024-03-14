@@ -1,6 +1,6 @@
-package com.example.my_streaming.Domain.Transactions.Transaction;
+package com.example.my_streaming.Application.Transactions.Transaction;
 
-import com.example.my_streaming.Domain.Transactions.Card.Card;
+import com.example.my_streaming.Application.Transactions.Card.Card;
 import jakarta.persistence.*;
 
 import java.util.Date;

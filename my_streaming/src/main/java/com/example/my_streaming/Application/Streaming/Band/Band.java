@@ -1,9 +1,6 @@
-package com.example.my_streaming.Domain.Streaming.Band;
+package com.example.my_streaming.Application.Streaming.Band;
 
-import com.example.my_streaming.Domain.Streaming.Album.Album;
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 @Table(name = "tb_band")
