@@ -1,5 +1,6 @@
 package com.example.my_streaming.Application.Account.User;
 
+import com.example.my_streaming.Application.Account.Playlist.Playlist;
 import com.example.my_streaming.Application.Streaming.Band.BandRepository;
 import com.example.my_streaming.Application.Streaming.Music.Music;
 import com.example.my_streaming.Application.Transactions.Card.Card;
@@ -50,34 +51,38 @@ public class UserService {
         return user;
     }
 
-    public void favoriteMusic(Long userId, Long musicId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
+    public void favoriteMusic(Long userId, Long musicId, String playlistName) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
+        Music music = verifyMusic(musicId);
 
-            Music music = verifyMusic(musicId);
-            user.favoriteMusic(music, "Favorites");
+        Playlist favoritesPlaylist = getPlaylistByName(user, playlistName);
 
-            userRepository.save(user);
-        } else {
-            throw new RuntimeException("User not found");
+        if (!favoritesPlaylist.getMusics().contains(music)) {
+            favoritesPlaylist.getMusics().add(music);
         }
+
+        userRepository.save(user);
     }
 
-    public void unfavoriteMusic(Long userId, Long musicId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
+    public void unfavoriteMusic(Long userId, Long musicId, String playlistName) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
+        Music music = verifyMusic(musicId);
 
-            Music music = verifyMusic(musicId);
-            user.unfavoriteMusic(music, "Favorites");
+        Playlist favoritesPlaylist = getPlaylistByName(user, playlistName);
+        favoritesPlaylist.getMusics().removeIf(m -> m.getId().equals(music.getId()));
+        userRepository.save(user);
 
-            userRepository.save(user);
-        } else {
-            throw new RuntimeException("User not found");
-        }
+    }
+
+    private Playlist getPlaylistByName(User user, String playlistName) {
+       return user.getPlaylists().stream()
+                .filter(playlist -> playlist.getName().equals(playlistName))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Playlist not found" + playlistName));
     }
 
 

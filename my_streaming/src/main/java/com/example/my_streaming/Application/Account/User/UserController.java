@@ -68,12 +68,14 @@ public class UserController {
     }
 
     @PostMapping(value = "/users/{id}/favorite/{idMusic}")
-    public ResponseEntity<UserResponse> FavoriteMusic(@PathVariable("id") Long id, @PathVariable("idMusic") Long idMusic){
+    public ResponseEntity<UserResponse> FavoriteMusic(@PathVariable("id") Long id,
+                                                      @PathVariable("idMusic") Long idMusic,
+                                                      @RequestParam(value = "playlistName", defaultValue = "Favorites") String playlistName){
 
         try{
 
             User user = service.getById(id);
-            service.favoriteMusic(id, idMusic);
+            service.favoriteMusic(id, idMusic, playlistName);
 
 
             UserResponse response = userToResponse(user);
@@ -86,10 +88,12 @@ public class UserController {
     }
 
     @PostMapping(value = "/users/{id}/unfavorite/{idMusic}")
-    public ResponseEntity<UserResponse> UnfavoriteMusic(@PathVariable("id") Long id, @PathVariable("idMusic") Long idMusic){
+    public ResponseEntity<UserResponse> UnfavoriteMusic(@PathVariable("id") Long id,
+                                                        @PathVariable("idMusic") Long idMusic,
+                                                        @RequestParam(value = "playlistName", defaultValue = "Favorites") String playlistName){
 
         try{
-            service.unfavoriteMusic(id, idMusic);
+            service.unfavoriteMusic(id, idMusic, playlistName);
 
             User user = service.getById(id);
 
