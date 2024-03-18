@@ -1,11 +1,14 @@
 package com.example.my_streaming.Application.Account.User;
 
+import com.example.my_streaming.Application.Account.Notification.Notify;
+import com.example.my_streaming.Application.Account.Notification.NotifyAzureServiceBus;
 import com.example.my_streaming.Application.Account.Playlist.Playlist;
 import com.example.my_streaming.Application.Streaming.Band.BandRepository;
 import com.example.my_streaming.Application.Streaming.Music.Music;
 import com.example.my_streaming.Application.Transactions.Card.Card;
 import com.example.my_streaming.Application.Transactions.Plan.Plan;
 import com.example.my_streaming.Application.Transactions.Plan.PlanRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class UserService {
@@ -29,7 +33,7 @@ public class UserService {
     private EntityManager entityManager;
 
     @Transactional
-    public User createUser(String name, Long planId, Card card) {
+    public User createUser(String name, Long planId, Card card) throws ExecutionException, InterruptedException, JsonProcessingException {
         Plan plan = planRepository.getPlanById(planId);
         if (plan == null) {
             throw new RuntimeException("Plan not found");
@@ -47,6 +51,14 @@ public class UserService {
 
 
         userRepository.save(user);
+
+        Notify notify = new Notify();
+        notify.setId_user(user.getId());
+        notify.setMessage("basic plan successfully activated for a value of " + plan.getPlan_value());
+
+        NotifyAzureServiceBus serviceBus = new NotifyAzureServiceBus();
+        serviceBus.sendMessage(notify);
+
 
         return user;
     }

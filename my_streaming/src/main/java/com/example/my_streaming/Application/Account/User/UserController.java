@@ -8,6 +8,7 @@ import com.example.my_streaming.Requests.CreateUserRequest;
 import com.example.my_streaming.Responses.MusicResponse;
 import com.example.my_streaming.Responses.UserResponse;
 import com.example.my_streaming.Responses.PlaylistResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping(value = "/api/v1", produces = {"application/json"})
@@ -62,7 +64,7 @@ public class UserController {
             User user = service.createUser(request.getName(), request.getPlanId(), card);
             UserResponse response = userToResponse(user);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | ExecutionException | InterruptedException | JsonProcessingException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
