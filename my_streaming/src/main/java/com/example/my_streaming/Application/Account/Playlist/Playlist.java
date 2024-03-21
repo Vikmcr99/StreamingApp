@@ -21,7 +21,7 @@ public class Playlist {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany (mappedBy = "playlist", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Music> musics = new ArrayList<>();
 
     public Long getId() {

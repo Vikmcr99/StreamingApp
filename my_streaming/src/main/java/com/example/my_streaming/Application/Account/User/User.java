@@ -28,6 +28,7 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Card> cards = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER , cascade = CascadeType.ALL)
@@ -35,6 +36,7 @@ public class User {
     private List<Playlist> playlists = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER ,  cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Subscription> subscriptionList = new ArrayList<>();
 
     public User() {

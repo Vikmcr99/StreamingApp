@@ -14,9 +14,6 @@ public class Music {
     @Column
     private double duration;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "playlist_id")
-    private Playlist playlist;
 
 
     public Music(Long id, String name, double duration) {
@@ -45,14 +42,6 @@ public class Music {
         this.name = name;
     }
 
-
-    public Playlist getPlaylist() {
-        return playlist;
-    }
-
-    public void setPlaylist(Playlist playlist) {
-        this.playlist = playlist;
-    }
 
     public double getDuration() {
         return duration;

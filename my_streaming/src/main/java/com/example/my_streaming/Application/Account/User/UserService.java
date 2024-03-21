@@ -45,6 +45,7 @@ public class UserService {
         card.setUser(user);
         user.getCards().add(card);
 
+
          if (!entityManager.contains(user)) {
             user = entityManager.merge(user);
         }

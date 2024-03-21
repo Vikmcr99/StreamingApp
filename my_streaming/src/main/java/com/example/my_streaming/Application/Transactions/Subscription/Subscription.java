@@ -14,8 +14,8 @@ public class Subscription {
 
     private Long Id;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "plan_id")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "plans_id")
     private Plan plan;
     private Boolean active;
     private Date date;
