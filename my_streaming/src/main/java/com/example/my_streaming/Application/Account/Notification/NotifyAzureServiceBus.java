@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class NotifyAzureServiceBus {
 
-    private static final String connectionString = "Endpoint=sb://my-streaming.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=UCS0sOHcAcyB9FtP62mpuAvA2/NlJtiBt+ASbJC83+s=";
+    private static final String connectionString = "connectionstring_trocarPelaVerdadeira";
     private static final String queueName = "notify_queue";
 
     public NotifyAzureServiceBus() { }
