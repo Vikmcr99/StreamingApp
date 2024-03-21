@@ -88,30 +88,6 @@ public class User {
         this.subscriptionList.add(newSubscription);
     }
 
-//    public void favoriteMusic(Music music, String playlistName) {
-//        Playlist playlist = this.getPlaylistByName(playlistName);
-//        if (playlist == null) {
-//            throw new RuntimeException("Playlist not found");
-//        }
-//        playlist.getMusics().add(music);
-//    }
-//
-//    public void unfavoriteMusic(Music music, String playlistName) {
-//        Playlist playlist = this.getPlaylistByName(playlistName);
-//        if (playlist == null) {
-//            throw new RuntimeException("Playlist not found");
-//        }
-//        playlist.getMusics().removeIf(m -> m.getId().equals(music.getId()));
-//    }
-//
-//    private Playlist getPlaylistByName(String playlistName) {
-//        for (Playlist playlist : this.playlists) {
-//            if (playlist.getName().equals(playlistName)) {
-//                return playlist;
-//            }
-//        }
-//        return null;
-//    }
 
 
     public Long getId() {
