@@ -51,6 +51,8 @@ public class User {
         this.addCard(card);
         this.createPlaylist();
 
+
+
     }
 
     public void createPlaylist(String name, boolean isOpen) {
@@ -70,7 +72,7 @@ public class User {
         this.cards.add(card);
     }
 
-    private void subscribeToPlan(Plan plan, Card card) {
+    public void subscribeToPlan(Plan plan, Card card) {
         card.createTransaction(plan.getName(), plan.getPlan_value(), plan.getDescription());
 
         for (Subscription subscription : this.subscriptionList) {

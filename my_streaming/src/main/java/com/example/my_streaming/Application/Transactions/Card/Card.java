@@ -30,6 +30,7 @@ public class Card {
     @OneToMany (mappedBy = "card", fetch = FetchType.EAGER, cascade =  CascadeType.ALL)
     private List<Transaction> transactions = new ArrayList<>();
 
+
     public void createTransaction(String merchant, double value, String description) {
         CardException validationErrors = new CardException();
 
