@@ -47,5 +47,5 @@ jobs:
             -Dsonar.java.binaries=target/classes \
             -Dsonar.junit.reportPaths=target/surefire-reports \
             -Dsonar.jacoco.reportPaths=target/jacoco.exec \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+            -Dsonar.coverage.jacoco.xmlReportPaths="**/coverage.opencover.xml" \
             -X
