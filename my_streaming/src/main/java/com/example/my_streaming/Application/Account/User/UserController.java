@@ -28,6 +28,11 @@ public class UserController {
     @Autowired
     private UserService service;
 
+    //todo: Adicionado para os testes, testar se o codigo continua funcional
+    public UserController(UserService userService) {
+        this.service = userService;
+    }
+
     @GetMapping(value="/users")
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> users =  service.getAllUsers();

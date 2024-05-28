@@ -1,8 +1,15 @@
 package com.example.my_streaming.Application.Account.User;
 
+import com.example.my_streaming.Application.Account.Playlist.Playlist;
+import com.example.my_streaming.Application.Streaming.Band.BandRepository;
+import com.example.my_streaming.Application.Streaming.Music.Music;
 import com.example.my_streaming.Application.Transactions.Card.Card;
+import com.example.my_streaming.Application.Transactions.Plan.Plan;
+import com.example.my_streaming.Application.Transactions.Subscription.Subscription;
 import com.example.my_streaming.Requests.CardRequest;
 import com.example.my_streaming.Requests.CreateUserRequest;
+import com.example.my_streaming.Responses.MusicResponse;
+import com.example.my_streaming.Responses.PlaylistResponse;
 import com.example.my_streaming.Responses.UserResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,14 +27,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,6 +46,9 @@ class UserControllerTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private BandRepository bandRepository;
 
     @InjectMocks
     private UserController userController;
@@ -122,6 +131,101 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("Should return OK with user list when users are found")
+    void returnOkWithUserListWhenUsersFound() {
+        List<User> users = Arrays.asList(new User(), new User());
+        when(userService.getAllUsers()).thenReturn(users);
+
+        ResponseEntity<List<User>> responseEntity = userController.getAllUsers();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(users, responseEntity.getBody());
+    }
+
+    @Test
+    void testDeleteAccount_Success() {
+        UserService userService = mock(UserService.class);
+        doNothing().when(userService).deleteUser(anyLong());
+
+        UserController userController = new UserController(userService);
+
+        ResponseEntity responseEntity = userController.deleteAccount(1L);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        verify(userService, times(1)).deleteUser(1L);
+    }
+
+    @Test
+    void testDeleteAccount_Failure() {
+        UserService userService = mock(UserService.class);
+        doThrow(new RuntimeException()).when(userService).deleteUser(anyLong());
+        UserController userController = new UserController(userService);
+
+        ResponseEntity responseEntity = userController.deleteAccount(1L);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
+        verify(userService, times(1)).deleteUser(1L);
+    }
+
+    @Test
+    void testUserToResponse_NoActiveSubscription() {
+        User user = new User();
+        user.setId(1L);
+        user.setName("Jonatan");
+
+        UserService userService = mock(UserService.class);
+        when(userService.getById(1L)).thenReturn(user);
+
+
+        UserController userController = new UserController(userService);
+
+        assertThrows(RuntimeException.class, () -> userController.findById(1L));
+    }
+
+    @Test
+    @DisplayName("Should return BAD_REQUEST when adding favorite music fails")
+    void returnBadRequestWhenAddingFavoriteMusicFails() {
+
+        when(userService.getById(anyLong())).thenThrow(new RuntimeException());
+
+        ResponseEntity<UserResponse> responseEntity = userController.FavoriteMusic(1L, 1L, "Favorites");
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Should return OK with user response when user is found")
+    void returnOkWithUserResponseWhenUserFound() {
+        Plan plan = new Plan();
+        plan.setId(1L);
+
+        Subscription subscription = new Subscription();
+        subscription.setActive(true);
+        subscription.setPlan(plan); //assinatura com um plano associado
+
+        User user = new User();
+        user.setId(1L);
+        user.setName("Jonatan");
+
+        List<Subscription> subscriptions = new ArrayList<>();
+        subscriptions.add(subscription);
+        user.setSubscriptionList(subscriptions);
+
+        when(userService.getById(1L)).thenReturn(user);
+
+        ResponseEntity<UserResponse> responseEntity = userController.findById(1L);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        UserResponse responseBody = responseEntity.getBody();
+        assertNotNull(responseBody);
+        assertEquals(1L, responseBody.getId());
+        assertEquals("Jonatan", responseBody.getName());
+    }
+
+
+@Test
     @DisplayName("Should return all users")
     void getAllUsers() throws Exception {
         User user = new User();

@@ -6,6 +6,8 @@ import com.example.my_streaming.Application.Streaming.Music.Music;
 import com.example.my_streaming.Application.Transactions.Card.Card;
 import com.example.my_streaming.Application.Transactions.Plan.Plan;
 import com.example.my_streaming.Application.Transactions.Plan.PlanRepository;
+import com.example.my_streaming.Responses.MusicResponse;
+import com.example.my_streaming.Responses.PlaylistResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -105,6 +108,19 @@ class UserServiceTest {
 
         assertTrue(playlist.getMusics().contains(music));
         verify(userRepository, times(1)).save(any(User.class));
+
+        PlaylistResponse playlistResponse = new PlaylistResponse();
+        List<MusicResponse> musicResponses = new ArrayList<>();
+        for (Music m : playlist.getMusics()) {
+            MusicResponse musicResponse = new MusicResponse();
+            musicResponse.setId(m.getId());
+            musicResponse.setName(m.getName());
+            musicResponse.setDuration(m.getDuration());
+            musicResponses.add(musicResponse);
+        }
+        playlistResponse.setMusics(musicResponses);
+        assertNotNull(playlistResponse.getMusics());
+        assertTrue(playlistResponse.getMusics().isEmpty());
     }
 
     @Test
@@ -163,4 +179,18 @@ class UserServiceTest {
 
         verify(userRepository, times(1)).deleteById(1L);
     }
+
+    @Test
+    @DisplayName("Should throw exception when verifying non-existing music")
+    void throwExceptionWhenVerifyingNonExistingMusic() {
+
+        when(bandRepository.getMusic(anyLong())).thenReturn(null);
+        assertThrows(RuntimeException.class, () -> {
+            userService.verifyMusic(1L);
+        });
+    }
+
+
+
+
 }

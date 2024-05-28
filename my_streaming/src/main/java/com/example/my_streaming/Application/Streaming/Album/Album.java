@@ -10,9 +10,7 @@ public class Album {
     private Long id;
 
     private String name;
-    //private Band band;
 
-    //private List<Music> musics;
 
     public Long getId() {
         return id;
@@ -30,19 +28,5 @@ public class Album {
         this.name = name;
     }
 
-//    public Band getBand() {
-//        return band;
-//    }
-//
-//    public void setBand(Band band) {
-//        this.band = band;
-//    }
 
-   /* public List<Music> getMusics() {
-        return musics;
-    }
-
-    public void setMusics(List<Music> musics) {
-        this.musics = musics;
-    }*/
 }

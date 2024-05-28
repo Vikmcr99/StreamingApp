@@ -99,7 +99,7 @@ public class UserService {
     }
 
 
-    private Music verifyMusic(Long musicId) {
+    public Music verifyMusic(Long musicId) {
         Music music = bandRepository.getMusic(musicId);
         if (music == null) {
             throw new RuntimeException("did not find the requested music");
