@@ -1,6 +1,5 @@
 package com.example.my_streaming.Application.Account.User;
 
-import com.example.my_streaming.Application.Streaming.Music.Music;
 import com.example.my_streaming.Application.Transactions.Card.Card;
 import com.example.my_streaming.Application.Account.Playlist.Playlist;
 import com.example.my_streaming.Application.Transactions.Plan.Plan;
