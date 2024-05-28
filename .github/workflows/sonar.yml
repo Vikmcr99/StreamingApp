@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: 'zulu' # Alternative distribution options are available.
+          distribution: 'zulu'
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
@@ -46,5 +46,6 @@ jobs:
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.java.binaries=target/classes \
             -Dsonar.junit.reportPaths=target/surefire-reports \
-            -Dsonar.jacoco.reportPath=${project.basedir}/target/jacoco.exec \
-            -Dsonar.coverage.jacoco.xmlReportPaths=${project.basedir}/target/site/jacoco/jacoco.xml
+            -Dsonar.jacoco.reportPaths=target/jacoco.exec \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+            -X
