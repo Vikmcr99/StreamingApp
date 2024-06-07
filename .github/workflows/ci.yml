@@ -40,4 +40,5 @@ jobs:
         push: true
         tags: ${{secrets.REGISTRY_LOGIN_SERVER}}/my_streaming:${{github.sha}}
         file: my_streaming/dockerfile
+        context: ./my_streaming
         
