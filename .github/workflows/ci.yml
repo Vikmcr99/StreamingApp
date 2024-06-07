@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
@@ -23,3 +27,17 @@ jobs:
 
     - name: Update dependency graph
       run: mvn com.github.ferstl:depgraph-maven-plugin:4.0.1:graph --file my_streaming/pom.xml
+    
+    - name: Docker Login
+      uses: azure/docker-login@v1
+      with: 
+        login-server: ${{secrets.REGISTRY_LOGIN_SERVER}}
+        username: ${{secrets.REGISTRY_USERNAME}}
+        password : ${{secrets.REGISTRY_PASSWORD}}
+    - name: Builder image and push
+      uses: docker/build-push-action@v5
+      with: 
+        push: true
+        tags: ${{secrets.REGISTRY_LOGIN_SERVER}}/my_streaming:${{github.sha}}
+        file: my_streaming/dockerfile
+        
