@@ -1,4 +1,5 @@
 FROM azul/zulu-openjdk:17
+EXPOSE 80
 COPY target/my_streaming-1.0.0.jar my_streaming-1.0.0.jar
 
-ENTRYPOINT ["java", "-jar", "./my_streaming-1.0.0.jar"]
+ENTRYPOINT ["java", "-jar", "./my_streaming-1.0.0.jar", "--server.port=80"]
