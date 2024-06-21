@@ -28,7 +28,7 @@ public class PlaylistResponse {
         return musics;
     }
 
-    public void setMusics(List<MusicResponse> music) {
+    public void setMusics(List<MusicResponse> musics) {
         this.musics = musics;
     }
 }

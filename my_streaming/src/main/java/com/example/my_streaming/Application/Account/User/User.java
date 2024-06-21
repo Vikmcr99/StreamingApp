@@ -26,6 +26,8 @@ public class User {
 
     private String password;
 
+    private Random random;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Card> cards = new ArrayList<>();
@@ -42,6 +44,11 @@ public class User {
         this.cards = new ArrayList<>();
         this.playlists = new ArrayList<>();
         this.subscriptionList = new ArrayList<>();
+        this.random = new Random();
+    }
+
+    public Long generateNextLong(){
+        return this.random.nextLong();
     }
 
     public void createAccountOnStreaming(String name, Plan plan, Card card) {
@@ -56,7 +63,7 @@ public class User {
 
     public void createPlaylist(String name, boolean isOpen) {
         Playlist playlist = new Playlist();
-        playlist.setId(new Random().nextLong());
+        playlist.setId(generateNextLong());
         playlist.setName(name);
         playlist.setOpen(isOpen);
         playlist.setUser(this);
@@ -75,7 +82,7 @@ public class User {
         card.createTransaction(plan.getName(), plan.getPlan_value(), plan.getDescription());
 
         for (Subscription subscription : this.subscriptionList) {
-            if (subscription.isActive()) {
+            if (Boolean.TRUE.equals(subscription.isActive())) {
                 subscription.setActive(false);
             }
         }
@@ -84,7 +91,7 @@ public class User {
         newSubscription.setActive(true);
         newSubscription.setDate(new Date());
         newSubscription.setPlan(plan);
-        newSubscription.setId(new Random().nextLong());
+        newSubscription.setId(generateNextLong());
         newSubscription.setUser(this);
         this.subscriptionList.add(newSubscription);
     }

@@ -21,16 +21,19 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PlanRepository planRepository;
+    private final BandRepository bandRepository;
+    private final EntityManager entityManager;
 
     @Autowired
-    private PlanRepository planRepository;
-
-    @Autowired
-    private BandRepository bandRepository;
-    @Autowired
-    private EntityManager entityManager;
+    public UserService(UserRepository userRepository, PlanRepository planRepository,
+                       BandRepository bandRepository, EntityManager entityManager) {
+        this.userRepository = userRepository;
+        this.planRepository = planRepository;
+        this.bandRepository = bandRepository;
+        this.entityManager = entityManager;
+    }
 
     @Transactional
     public User createUser(String name, Long planId, Card card) throws ExecutionException, InterruptedException, JsonProcessingException {

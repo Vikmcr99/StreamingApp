@@ -25,10 +25,8 @@ import java.util.concurrent.ExecutionException;
 
 public class UserController {
 
+    private final UserService service;
     @Autowired
-    private UserService service;
-
-    //todo: Adicionado para os testes, testar se o codigo continua funcional
     public UserController(UserService userService) {
         this.service = userService;
     }
@@ -69,8 +67,11 @@ public class UserController {
             User user = service.createUser(request.getName(), request.getPlanId(), card);
             UserResponse response = userToResponse(user);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (RuntimeException | ExecutionException | InterruptedException | JsonProcessingException e) {
+        } catch (RuntimeException | ExecutionException | JsonProcessingException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
