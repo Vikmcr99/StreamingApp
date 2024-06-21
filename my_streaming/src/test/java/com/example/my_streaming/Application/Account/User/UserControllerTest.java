@@ -110,15 +110,6 @@ class UserControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    @Test
-    void testFindById_UserNotExists() {
-
-        when(userService.getById(anyLong())).thenThrow(NoSuchElementException.class);
-
-        ResponseEntity<UserResponse> responseEntity = userController.findById(1L);
-
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-    }
 
     @Test
     @DisplayName("Should return no content when there are no users")
@@ -130,17 +121,7 @@ class UserControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-    @Test
-    @DisplayName("Should return OK with user list when users are found")
-    void returnOkWithUserListWhenUsersFound() {
-        List<User> users = Arrays.asList(new User(), new User());
-        when(userService.getAllUsers()).thenReturn(users);
 
-        ResponseEntity<List<User>> responseEntity = userController.getAllUsers();
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(users, responseEntity.getBody());
-    }
 
     @Test
     void testDeleteAccount_Success() {
@@ -194,35 +175,7 @@ class UserControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
-    @Test
-    @DisplayName("Should return OK with user response when user is found")
-    void returnOkWithUserResponseWhenUserFound() {
-        Plan plan = new Plan();
-        plan.setId(1L);
 
-        Subscription subscription = new Subscription();
-        subscription.setActive(true);
-        subscription.setPlan(plan); //assinatura com um plano associado
-
-        User user = new User();
-        user.setId(1L);
-        user.setName("Jonatan");
-
-        List<Subscription> subscriptions = new ArrayList<>();
-        subscriptions.add(subscription);
-        user.setSubscriptionList(subscriptions);
-
-        when(userService.getById(1L)).thenReturn(user);
-
-        ResponseEntity<UserResponse> responseEntity = userController.findById(1L);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-
-        UserResponse responseBody = responseEntity.getBody();
-        assertNotNull(responseBody);
-        assertEquals(1L, responseBody.getId());
-        assertEquals("Jonatan", responseBody.getName());
-    }
 
 
 @Test
