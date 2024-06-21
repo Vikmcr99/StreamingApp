@@ -175,6 +175,63 @@ class UserControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
+    @Test
+    @DisplayName("Should return OK unfavorite music succeeds")
+    void returnOkWhenUnfavoriteMusicSucceeds() throws Exception {
+
+        User user = new User();
+        user.setId(1L);
+        user.setName("Jonatan");
+        when(userService.getById(1L)).thenReturn(user);
+
+        String playlistName = "Favorites";
+        Long userId = 1L;
+        Long musicId = 1L;
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/{id}/unfavorite/{idMusic}", userId, musicId)
+                        .param("playlistName", playlistName)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+
+    @Test
+    @DisplayName("Should return OK when adding favorite music succeeds")
+    void returnOkWhenAddingFavoriteMusicSucceeds() throws Exception {
+
+        User user = new User();
+        user.setId(1L);
+        user.setName("Jonatan");
+        when(userService.getById(1L)).thenReturn(user);
+
+        String playlistName = "Favorites";
+        Long userId = 1L;
+        Long musicId = 1L;
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/{id}/favorite/{idMusic}", userId, musicId)
+                        .param("playlistName", playlistName)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    @DisplayName("Should return BAD_REQUEST when user not found")
+    void returnBadRequestWhenUserNotFound() throws Exception {
+        Long userId = 1L;
+        Long musicId = 1L;
+        String playlistName = "Favorites";
+
+        doThrow(new RuntimeException("User not found")).when(userService).favoriteMusic(userId, musicId, playlistName);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/{id}/favorite/{idMusic}", userId, musicId)
+                        .param("playlistName", playlistName)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+
 
 
 
